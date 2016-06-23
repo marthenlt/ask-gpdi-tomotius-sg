@@ -14,22 +14,29 @@ public class Question {
     @Id
     private String id;
 
+    String title;
     String question;
     Date postedAt;
     String postedBy; //By default is anonymous..
     String theme;
     Boolean isAnswered;
 
-    public Question() {};
+    public Question() {
+        this.postedAt = new Date();
+        this.postedBy = "anonymous"; //Submit by anonymous..
+        this.isAnswered = false;
+    };
 
-    public Question(String question, Date postedAt, String postedBy) {
+    public Question(String title, String question, Date postedAt, String postedBy) {
+        this.title = title;
         this.question = question;
         this.postedAt = postedAt;
         this.postedBy = postedBy;
         this.isAnswered = false;
     }
 
-    public Question(String question, String postedBy) {
+    public Question(String title, String question, String postedBy) {
+        this.title = title;
         this.question = question;
         this.postedAt = new Date();
         this.postedBy = postedBy;
@@ -37,7 +44,8 @@ public class Question {
     }
 
     //Default constructor
-    public Question(String question) {
+    public Question(String title, String question) {
+        this.title = title;
         this.question = question;
         this.postedAt = new Date();
         this.postedBy = "anonymous"; //Submit by anonymous..
@@ -82,14 +90,32 @@ public class Question {
         return theme;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public Boolean getIsAnswered() {
+        return isAnswered;
+    }
+
+    public void setIsAnswered(Boolean isAnswered) {
+        this.isAnswered = isAnswered;
+    }
+
     public void setTheme(String theme) {
         this.theme = theme;
     }
+
 
     @Override
     public String toString() {
         return "Question{" +
                 "id='" + id + '\'' +
+                "title='" + title + '\'' +
                 "question='" + question + '\'' +
                 ", postedAt=" + postedAt +
                 ", postedBy='" + postedBy + '\'' +

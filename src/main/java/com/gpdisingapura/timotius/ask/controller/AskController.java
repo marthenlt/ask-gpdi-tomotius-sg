@@ -27,15 +27,20 @@ public class AskController {
 
     //default question post..
     @RequestMapping(method = RequestMethod.POST, value = "/post")
-    ResponseEntity<Void> postQuestionAnonymously(@RequestParam("question") String q) {
-        askService.postQuestionAnonymously(q);
+    ResponseEntity<Void> postQuestionAnonymously(
+            @RequestParam("title") String title,
+            @RequestParam("question") String q) {
+        askService.postQuestionAnonymously(title, q);
         HttpHeaders headers = new HttpHeaders();
         return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/postBy")
-    ResponseEntity<Void> postQuestion(@RequestParam("postedBy") String postedBy, @RequestParam("question") String q) {
-        askService.postQuestion(postedBy, q);
+    ResponseEntity<Void> postQuestion(
+            @RequestParam("postedBy") String postedBy,
+            @RequestParam("title") String title,
+            @RequestParam("question") String q) {
+        askService.postQuestion(postedBy, title, q);
         HttpHeaders headers = new HttpHeaders();
         return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
     }

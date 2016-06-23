@@ -47,7 +47,7 @@ public class DemoApplicationTests {
     @Test
     public void loadDummyData() throws InterruptedException, QuestionDoesNotExistException {
         for (int i=0; i<50; i++) {
-            askService.postQuestion("Marthen Luther", "Question no. " + (i+1));
+            askService.postQuestion("Marthen Luther", "Title " + (i+1), "Question no. " + (i+1));
             System.out.print("record found after adding: " + askService.noOfRecordFoundForIsAnsweredIsFalse());
         }
     }

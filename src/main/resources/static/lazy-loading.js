@@ -2,80 +2,43 @@
  * Created by Marthen on 6/23/16.
  */
 
-
-/*
- <ul data-role="listview" data-inset="true">
-     <li data-role="list-divider">Friday, October 8, 2010 <span class="ui-li-count">2</span></li>
-     <li><a href="index.html">
-     <h2>Stephen Weber</h2>
-     <p><strong>You've been invited to a meeting at Filament Group in Boston, MA</strong></p>
-     <p>Hey Stephen, if you're available at 10am tomorrow, we've got a meeting with the jQuery team.</p>
-         <p class="ui-li-aside"><strong>6:24</strong>PM</p>
-     </a></li>
-     <li><a href="index.html">
-     <h2>jQuery Team</h2>
-     <p><strong>Boston Conference Planning</strong></p>
-     <p>In preparation for the upcoming conference in Boston, we need to start gathering a list of sponsors and speakers.</p>
-         <p class="ui-li-aside"><strong>9:18</strong>AM</p>
-     </a></li>
-     <li data-role="list-divider">Thursday, October 7, 2010 <span class="ui-li-count">1</span></li>
-     <li><a href="index.html">
-     <h2>Avery Walker</h2>
-     <p><strong>Re: Dinner Tonight</strong></p>
-     <p>Sure, let's plan on meeting at Highland Kitchen at 8:00 tonight. Can't wait!</p>
-         <p class="ui-li-aside"><strong>4:48</strong>PM</p>
-     </a></li>
- </ul>
- */
-
-
 var recordPerPage = 10; //max items per page
 var page = 0; //initialize page number
-var maxPage=0; //initialized dynamically based on actual number of questions stored in MongoDB..
-var currentNumberOfRecsFound=0;
-var previousNumberOfRecsFound=0;
+var maxPage = 0; //initialized dynamically based on actual number of questions stored in MongoDB..
+var currentNumberOfRecsFound = 0;
+var previousNumberOfRecsFound = 0;
 var loading = false;
-//var newQuestion=false;
-var questionNo=1;
+var questionNo = 1;
+var isHomePage=true;
+
 
 
 $(document).ready(function () {
-    loadListView(recordPerPage, maxPage); //load some images onload
+    if (isHomePage)
+        loadListView(recordPerPage, maxPage); //load some images onload
 });
 
 //Handler for scrolling toward end of document
 $(document).on("scrollstop", function () {
-    console.log('scroll event..');
-    if (!loading) loadNextPage();
+    if (isHomePage) {
+        console.log('scroll event..');
+        if (!loading) loadNextPage();
+    }
 });
 
 //Load content for next page
 function loadNextPage() {
-//    previousNumberOfRecsFound = currentNumberOfRecsFound;
-//    console.log('inside loadNextPage() --> previousNumberOfRecsFound: ', previousNumberOfRecsFound);
-//    console.log('inside loadNextPage() --> currentNumberOfRecsFound: ', currentNumberOfRecsFound);
-
     if (page < maxPage) {
         loadListView(recordPerPage, ++page);
     } else {
-//        console.log('inside loadNextPage() before calling initialMaxPage() --> previousNumberOfRecsFound: ', previousNumberOfRecsFound);
-//        console.log('inside loadNextPage() before calling initialMaxPage() --> currentNumberOfRecsFound: ', currentNumberOfRecsFound);
         initializeMaxPage();
-//        console.log('inside loadNextPage() after calling initialMaxPage() --> previousNumberOfRecsFound: ', previousNumberOfRecsFound);
-//        console.log('inside loadNextPage() after calling initialMaxPage() --> currentNumberOfRecsFound: ', currentNumberOfRecsFound);
         if (previousNumberOfRecsFound != currentNumberOfRecsFound) {
             console.log('inside loadNextPage() removeListFromListView() is called');
             removeListFromListView();
             //reset all the page index variable
             page = 0;
-            questionNo=1;
+            questionNo = 1;
             previousNumberOfRecsFound = currentNumberOfRecsFound;
-//            console.log('inside loadNextPage() before calling final loadListView() --> maxPage: ', maxPage);
-//            console.log('inside loadNextPage() before calling final loadListView() --> page: ', page);
-//            console.log('inside loadNextPage() before calling final loadListView() --> questionNo: ', questionNo);
-//            console.log('inside loadNextPage() before calling final loadListView() --> previousNumberOfRecsFound: ', previousNumberOfRecsFound);
-//            console.log('inside loadNextPage() before calling final loadListView() --> currentNumberOfRecsFound: ', currentNumberOfRecsFound);
-//            console.log('--------------------------------------------------------------------------------')
             loadListView(recordPerPage, page);
         }
     }
@@ -86,9 +49,9 @@ function initializeMaxPage() {
     $.mobile.loading('show');
     //Get the total number of available isAnswered questions
     var restURL = "/ask/numberOfUnansweredRecords";
-    $.getJSON(restURL, function(data) {
+    $.getJSON(restURL, function (data) {
         currentNumberOfRecsFound = data;
-        maxPage = Math.ceil(data/recordPerPage);
+        maxPage = Math.ceil(data / recordPerPage);
     })
     loading = false;
     $.mobile.loading('hide');
@@ -102,33 +65,83 @@ function loadListView(recordPerPage, innerPageNo) {
     initializeMaxPage()
     loading = true; //interlock to prevent multiple calls
     $.mobile.loading('show');
-
-//    console.log('inside loadListView() --> page: ', page);
-//    console.log('inside loadListView() --> maxPage: ', maxPage);
-//    console.log('inside loadListView() --> recordPerPage: ', recordPerPage);
-//    console.log('inside loadListView() --> innerPageNo: ', innerPageNo);
-
     //Get the actual records..
     restURL = "/ask/pagination/";
     var list = '';
     $.getJSON(restURL + innerPageNo + '/' + recordPerPage, {})
         .done(function (data) {
             $.each(data, function (index, value) {
-                list += '<li>' +
-                    '<a href"#">' + questionNo + '). Question: ' + value.question + '</a>' +
+                list += '<li><a href="#">' +
+                    '<h2>' + value.title + '</h2>' +
+                    '<p>' + value.question + '</p></a>' +
+//                    '<a href="#showDetail" data-rel="popup" data-position-to="window" data-transition="pop">Show Detail</a>' +
                     '</li>';
                 questionNo++;
-            }); // end each
-//            if (newQuestion) {
-//                $('#lazyloader').prepend(list).listview("refresh");
-//                newQuestion=false;
-//            } else {
-                $('#lazyloader').append(list).listview("refresh");
-//            }
 
+                }); // end each
+            $('#lazyloader').append(list).listview("refresh");
             loading = false;
             $.mobile.loading('hide');
             $('#questionsNo').text(currentNumberOfRecsFound);
         });
 
 };
+
+
+
+$(document).on('pageinit', '#new', function(){
+    $(document).on('click', '#submit', function() { // catch the form's submit event
+        if($('#title').val().length > 0 && $('#question').val().length > 0){
+            // Send data to server through the Ajax call
+            // action is functionality we want to call and outputJSON is our data
+            $.ajax({
+                url: '/ask/post',
+                data: $('#newquestionform').serialize(),
+                type: 'POST',
+//                async: 'true',
+//                dataType: 'json',
+//                contentType: "application/json; charset=utf-8",
+                beforeSend: function() {
+                    loading = true;
+                    $.mobile.loading('show');
+                },
+                complete: function() {
+                    loading = false;
+                    $.mobile.loading('hide');
+                },
+                success: function (result) {
+                    $.mobile.changePage("#successfulPostedQuestion");
+                },
+                error: function (request,error) {
+                    alert('Sorry there is an error. Could be due to network problem. Please try again later');
+                }
+            });
+        } else {
+            alert('Title and Question fields are mandatory!');
+        }
+
+        //remove all the value for the next question..
+        $("#question").val('');
+        $("#title").val('');
+//        $("#anonymous").val('off').selectmenu('refresh');
+
+        return false; // cancel original event to prevent form submitting
+    });
+});
+
+$(document).on('pagebeforeshow', '#new', function() {
+//    alert('pagebeforeshow untuk new dipanggil');
+    isHomePage=false;
+})
+
+$(document).on('pagebeforeshow', '#home', function() {
+//    alert('pagebeforeshow untuk home dipanggil');
+    isHomePage=true;
+    removeListFromListView();
+    //reset all the page index variable
+    page = 0;
+    questionNo = 1;
+    previousNumberOfRecsFound = currentNumberOfRecsFound;
+    loadListView(recordPerPage, page);
+})
+
