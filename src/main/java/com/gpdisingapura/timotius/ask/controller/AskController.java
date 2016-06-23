@@ -46,6 +46,15 @@ public class AskController {
         return new ResponseEntity<Question>(question, HttpStatus.OK);
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/pagination/{pageNo}/{itemPerPage}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    ResponseEntity<List<Question>> showInPagination(
+                @PathVariable Integer pageNo,
+                @PathVariable Integer itemPerPage
+                ) throws QuestionDoesNotExistException {
+        List<Question> questions = askService.showInPagination(pageNo, itemPerPage);
+        return new ResponseEntity<List<Question>>(questions, HttpStatus.OK);
+    }
+
     @RequestMapping(method = RequestMethod.GET, value = "/show/postedBy/{name}", produces = {MediaType.APPLICATION_JSON_VALUE})
     ResponseEntity<List<Question>> findByPostedBy(@PathVariable String name) throws QuestionDoesNotExistException {
         List<Question> questions = askService.findByPostedBy(name);

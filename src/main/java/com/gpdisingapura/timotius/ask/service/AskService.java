@@ -40,6 +40,20 @@ public class AskService {
         return question;
     }
 
+    public List<Question> showInPagination(Integer pageNo, Integer itemPerPage) throws QuestionDoesNotExistException {
+//        List<Question> questionAll = mongoOperation.findAll(Question.class);
+//        List<Question> questionIsAnsweredIsFalse = mongoOperation.findAll(Question.class);
+//        Query searchUserQueryIsAnswered = new Query(Criteria.where("isAnswered").is(false));
+//        questionIsAnsweredIsFalse = mongoOperation.find(searchUserQueryIsAnswered, Question.class);
+//        System.out.println("questionAll: " + questionAll.size());
+//        System.out.println("questionIsAnsweredIsFalse: " + questionIsAnsweredIsFalse.size());
+//
+        Query searchUserQuery = new Query(Criteria.where("isAnswered").is(false)).skip((pageNo-1) * itemPerPage).limit(itemPerPage);
+        List<Question> questions = mongoOperation.find(searchUserQuery, Question.class);
+//        System.out.println("(Live) - questions size: " + questions.size());
+        return questions;
+    }
+
     public List<Question> findByPostedBy(String name) throws QuestionDoesNotExistException {
         List<Question> questions = new ArrayList<Question>();
         // query to search question by name

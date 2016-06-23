@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ask Question</title>
+
+
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    <script src="lazy-loading.js"></script>
+
+</head>
+
+<body>
+
+<!-- PAGE HOME -->
+<div data-role="page" id="home">
+    <div data-role="header">
+        <h1>Ask Application for FAQ Session</h1>
+        <a href="#askquestion">Ask New Question</a>
+    </div>
+    <div data-role="content">
+        <h1>Number of questions (<span id="questionsNo">0</span>)</h1>
+        <ul id="lazyloader" data-role="listview" data-filter="true" data-listomatic="true">
+        </ul>
+    </div>
+    <div data-role="footer">
+        <h2>&copy; 2016 Youth Timothy GPdI Singapore</h2>
+    </div>
+</div>
+<!-- end:PAGE HOME -->
+
+
+<!-- PAGE DETAIL -->
+<div data-role="page" id="detail">
+    <div data-role="header">
+        <a data-rel="back" data-icon="home" data-iconpos="notext" href="#home">Home</a>
+        <h1>Question</h1>
+    </div>
+    <div data-role="content">
+
+        <!--
+        <div class="ui-field-contain">
+
+            <img name="foto" required id="foto" src="" alt="" style="width:50px;height:50px;">
+
+            <label for="nombre">Nombre</label>
+            <input type="text" name="nombre" required id="nombre" placeholder="Escribe tu nombre" value="">
+
+            <label for="email">Email</label>
+            <input type="email" name="email" required id="email" placeholder="tu@email.com" value="">
+        </div>
+        -->
+
+        <input type="text" name="question" data-disabled="true" value="Test">
+
+
+        <label for="flip1">Flip switch:</label>
+        <select name="flip1" id="flip1" data-role="slider">
+            <option value="off">Off</option>
+            <option value="on">On</option>
+        </select>
+
+        <!--
+        <button class="ui-btn ui-corner-all">Modificar</button>
+        -->
+
+        <div data-role="footer">
+            <h2>&copy; 2016 Youth Timothy GPdI Singapore</h2>
+        </div>
+    </div>
+    <!-- end:PAGE Detail -->
+
+</body>
+
+</html>
