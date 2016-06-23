@@ -3,6 +3,7 @@ package com.gpdisingapura.timotius.ask.service;
 import com.gpdisingapura.timotius.ask.model.Question;
 import com.gpdisingapura.timotius.ask.model.QuestionDoesNotExistException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -41,17 +42,19 @@ public class AskService {
     }
 
     public List<Question> showInPagination(Integer pageNo, Integer itemPerPage) throws QuestionDoesNotExistException {
-//        List<Question> questionAll = mongoOperation.findAll(Question.class);
-//        List<Question> questionIsAnsweredIsFalse = mongoOperation.findAll(Question.class);
-//        Query searchUserQueryIsAnswered = new Query(Criteria.where("isAnswered").is(false));
-//        questionIsAnsweredIsFalse = mongoOperation.find(searchUserQueryIsAnswered, Question.class);
-//        System.out.println("questionAll: " + questionAll.size());
-//        System.out.println("questionIsAnsweredIsFalse: " + questionIsAnsweredIsFalse.size());
-//
-        Query searchUserQuery = new Query(Criteria.where("isAnswered").is(false)).skip((pageNo-1) * itemPerPage).limit(itemPerPage);
+//        Query searchUserQuery = new Query(Criteria.where("isAnswered").is(false)).skip((pageNo-1) * itemPerPage).limit(itemPerPage);
+        Query searchUserQuery = new Query(Criteria.where("isAnswered").is(false))
+                .skip((pageNo) * itemPerPage)
+                .limit(itemPerPage)
+                .with(new Sort(Sort.Direction.DESC, "postedAt"));
         List<Question> questions = mongoOperation.find(searchUserQuery, Question.class);
-//        System.out.println("(Live) - questions size: " + questions.size());
         return questions;
+    }
+
+    public Long noOfRecordFoundForIsAnsweredIsFalse() throws QuestionDoesNotExistException {
+        Query searchUserQueryIsAnswered = new Query(Criteria.where("isAnswered").is(false));
+        return mongoOperation.count(searchUserQueryIsAnswered, Question.class);
+
     }
 
     public List<Question> findByPostedBy(String name) throws QuestionDoesNotExistException {
@@ -76,9 +79,13 @@ public class AskService {
                 Question.class);
     }
 
-    public void deleteQuestion(String questionId) throws QuestionDoesNotExistException {
+    public void deleteQuestion(String questionId) {
         Question question = mongoOperation.findById(questionId, Question.class);
         mongoOperation.remove(question);
+    }
+
+    public void deleteAll() {
+        mongoOperation.dropCollection(Question.class);
     }
 
 

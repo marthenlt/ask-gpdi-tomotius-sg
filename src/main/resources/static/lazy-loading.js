@@ -1,32 +1,6 @@
 /**
- * Created by root on 6/23/16.
+ * Created by Marthen on 6/23/16.
  */
-
-
-/*
-$(function (){
-    $.ajax({
-        type: 'GET',
-        dataType: 'json',
-        url: '/ask/showall',
-        success: function(data) {
-            console.log('success: ',  data);
-            var list = '';
-            $.each(data, function(index, value) {
-                list += '<li>' +
-                    '<a href"#">' + value.question + '</a>' +
-                    '</li>';
-            }); // end each
-            $('#lazyloader').append(list).listview("refresh");
-
-        }, // end success
-        error: function(data) {
-            console.log('error: ', data);
-        }
-    }); // end ajax
-});
-*/
-
 
 
 /*
@@ -55,86 +29,81 @@ $(function (){
  */
 
 
+var recordPerPage = 10; //max items per page
+var page = 0; //initialize page number
+var maxPage=0; //initialized dynamically based on actual number of questions stored in MongoDB..
+var currentNumberOfRecsFound=0;
+var previousNumberOfRecsFound=0;
+var loading = false;
+var questionNo=1;
 
-
-var per_page = 10; //max images per page
-var page = 1; //initialize page number
-var loading=false;
 
 $(document).ready(function () {
-//    refreshPage();
-    loadListView(per_page, 1); //load some images onload
+    loadListView(recordPerPage, maxPage); //load some images onload
 });
 
 //Handler for scrolling toward end of document
 //$(window).scroll(function () {
-$(document).on("scrollstop",function(){
-//    refreshPage();
+$(document).on("scrollstop", function () {
 //    if ($(window).scrollTop() >= $(document).height() - $(window).height() - 100) {
-        console.log('scroll event..');
-        //End of page, load next content here
-        if (!loading) loadNextPage();
+    console.log('scroll event..');
+    //End of page, load next content here
+    if (!loading) loadNextPage();
     //}
 });
 
 //Load content for next page
 function loadNextPage() {
-//    refreshPage();
-    loadListView(per_page, ++page);
+    if (page < maxPage) {
+        loadListView(recordPerPage, ++page);
+    } else {
+        if (previousNumberOfRecsFound != currentNumberOfRecsFound) {
+            loadListView(recordPerPage, page);
+            previousNumberOfRecsFound = currentNumberOfRecsFound;
+        }
+    }
 }
 
-
-//Load images from Datasource (Flickr in this case)
-function loadListView(per_page, page) {
-    console.log('per_page', per_page);
-    console.log('page', page);
+function initializeMaxPage() {
     loading = true; //interlock to prevent multiple calls
     $.mobile.loading('show');
-    var restURL = "/ask/pagination/";
-    var list = '';
-
-    //Calling to service provider
-    $.getJSON(restURL + page + '/' + per_page, {
-        per_page: per_page || 10,
-        page: page || 1
+    //Get the total number of available isAnswered questions
+    var restURL = "/ask/numberOfUnansweredRecords";
+    $.getJSON(restURL, function(data) {
+        currentNumberOfRecsFound = data;
+        maxPage = Math.ceil(data/recordPerPage);
     })
-        .done(function (data) {
-            $.each(data, function(index, value) {
-                list += '<li>' +
-                    '<a href"#">' + value.question + '</a>' +
-                    '</li>';
-                //Update page index
-                page = index;
-            }); // end each
-            $('#lazyloader').append(list).listview("refresh");
+    loading = false;
+    $.mobile.loading('hide');
+}
 
+function loadListView(recordPerPage, innerPageNo) {
+    initializeMaxPage()
+    loading = true; //interlock to prevent multiple calls
+    $.mobile.loading('show');
+
+    console.log('inside loadListView() --> page: ', page);
+    console.log('inside loadListView() --> maxPage: ', maxPage);
+    console.log('inside loadListView() --> recordPerPage: ', recordPerPage);
+    console.log('inside loadListView() --> innerPageNo: ', innerPageNo);
+
+    //Get the actual records..
+    restURL = "/ask/pagination/";
+    var list = '';
+    $.getJSON(restURL + innerPageNo + '/' + recordPerPage, {})
+        .done(function (data) {
+            $.each(data, function (index, value) {
+                list += '<li>' +
+                    '<a href"#">' + questionNo + '). Question: ' + value.question + '</a>' +
+                    '</li>';
+                questionNo++;
+            }); // end each
+//            $('#lazyloader').empty().append(list).listview("refresh");
+            $('#lazyloader').append(list).listview("refresh");
 
             loading = false;
             $.mobile.loading('hide');
-            console.log("data.page: ", data.page);
-            console.log("page: ", page);
-            $('#questionsNo').text($('#lazyloader li').size());
+            $('#questionsNo').text(currentNumberOfRecsFound);
         });
+
 };
-
-/*
-//C#-like feature to concat strings
-String.format = function () {
-    var s = arguments[0];
-    for (var i = 0; i < arguments.length - 1; i++) {
-        var reg = new RegExp("\\{" + i + "\\}", "gm");
-        s = s.replace(reg, arguments[i + 1]);
-    }
-    return s;
-}
-*/
-
-function refreshPage()
-{   console.log("inside refresh..")
-    jQuery.mobile.loadPage(
-        window.location.href, {
-            allowSamePageTransition: true,
-            transition: 'none',
-            reloadPage: true
-    });
-}

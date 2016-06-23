@@ -45,9 +45,36 @@ public class DemoApplicationTests {
 	}
 
     @Test
-    public void dummyData() {
-        askService.postQuestion("Marthen Luther", "22");
-        askService.postQuestion("Marthen Luther", "23");
+    public void loadDummyData() throws InterruptedException, QuestionDoesNotExistException {
+        for (int i=0; i<50; i++) {
+            askService.postQuestion("Marthen Luther", "Question no. " + (i+1));
+            System.out.print("record found after adding: " + askService.noOfRecordFoundForIsAnsweredIsFalse());
+        }
     }
+
+    @Test
+    public void clearAllDummyData() {
+        askService.deleteAll();;
+    }
+
+    @Test
+    public void descOrderTest() {
+        try {
+            int itemPerPage = 10;
+            int pageNo = 1; //start from page no.1
+            //Assuming there are total of 19 records where isAnswered is false..
+            List<Question> page1Questions = askService.showInPagination(pageNo, itemPerPage);
+            Assert.assertEquals(page1Questions.size(), itemPerPage);
+            List<Question> page2Questions = askService.showInPagination(pageNo+1, itemPerPage); // page 2
+            Assert.assertEquals(page2Questions.size(), itemPerPage);
+            List<Question> page3Questions = askService.showInPagination(pageNo+2, itemPerPage); //page 3
+            Assert.assertEquals(page3Questions.size(), itemPerPage);
+            List<Question> page4Questions = askService.showInPagination(pageNo+3, itemPerPage); //page 4
+            Assert.assertEquals(page4Questions.size(), 10);
+        } catch (QuestionDoesNotExistException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }

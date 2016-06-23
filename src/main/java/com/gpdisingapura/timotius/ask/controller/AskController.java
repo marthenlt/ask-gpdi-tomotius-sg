@@ -55,6 +55,12 @@ public class AskController {
         return new ResponseEntity<List<Question>>(questions, HttpStatus.OK);
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/numberOfUnansweredRecords", produces = {MediaType.APPLICATION_JSON_VALUE})
+    ResponseEntity<Long> noOfRecordFoundForIsAnsweredIsFalse() throws QuestionDoesNotExistException {
+        Long noOfRecs = askService.noOfRecordFoundForIsAnsweredIsFalse();
+        return new ResponseEntity<Long>(noOfRecs, HttpStatus.OK);
+    }
+
     @RequestMapping(method = RequestMethod.GET, value = "/show/postedBy/{name}", produces = {MediaType.APPLICATION_JSON_VALUE})
     ResponseEntity<List<Question>> findByPostedBy(@PathVariable String name) throws QuestionDoesNotExistException {
         List<Question> questions = askService.findByPostedBy(name);
