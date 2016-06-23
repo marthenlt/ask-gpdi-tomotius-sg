@@ -35,6 +35,7 @@ var maxPage=0; //initialized dynamically based on actual number of questions sto
 var currentNumberOfRecsFound=0;
 var previousNumberOfRecsFound=0;
 var loading = false;
+//var newQuestion=false;
 var questionNo=1;
 
 
@@ -43,23 +44,39 @@ $(document).ready(function () {
 });
 
 //Handler for scrolling toward end of document
-//$(window).scroll(function () {
 $(document).on("scrollstop", function () {
-//    if ($(window).scrollTop() >= $(document).height() - $(window).height() - 100) {
     console.log('scroll event..');
-    //End of page, load next content here
     if (!loading) loadNextPage();
-    //}
 });
 
 //Load content for next page
 function loadNextPage() {
+//    previousNumberOfRecsFound = currentNumberOfRecsFound;
+//    console.log('inside loadNextPage() --> previousNumberOfRecsFound: ', previousNumberOfRecsFound);
+//    console.log('inside loadNextPage() --> currentNumberOfRecsFound: ', currentNumberOfRecsFound);
+
     if (page < maxPage) {
         loadListView(recordPerPage, ++page);
     } else {
+//        console.log('inside loadNextPage() before calling initialMaxPage() --> previousNumberOfRecsFound: ', previousNumberOfRecsFound);
+//        console.log('inside loadNextPage() before calling initialMaxPage() --> currentNumberOfRecsFound: ', currentNumberOfRecsFound);
+        initializeMaxPage();
+//        console.log('inside loadNextPage() after calling initialMaxPage() --> previousNumberOfRecsFound: ', previousNumberOfRecsFound);
+//        console.log('inside loadNextPage() after calling initialMaxPage() --> currentNumberOfRecsFound: ', currentNumberOfRecsFound);
         if (previousNumberOfRecsFound != currentNumberOfRecsFound) {
-            loadListView(recordPerPage, page);
+            console.log('inside loadNextPage() removeListFromListView() is called');
+            removeListFromListView();
+            //reset all the page index variable
+            page = 0;
+            questionNo=1;
             previousNumberOfRecsFound = currentNumberOfRecsFound;
+//            console.log('inside loadNextPage() before calling final loadListView() --> maxPage: ', maxPage);
+//            console.log('inside loadNextPage() before calling final loadListView() --> page: ', page);
+//            console.log('inside loadNextPage() before calling final loadListView() --> questionNo: ', questionNo);
+//            console.log('inside loadNextPage() before calling final loadListView() --> previousNumberOfRecsFound: ', previousNumberOfRecsFound);
+//            console.log('inside loadNextPage() before calling final loadListView() --> currentNumberOfRecsFound: ', currentNumberOfRecsFound);
+//            console.log('--------------------------------------------------------------------------------')
+            loadListView(recordPerPage, page);
         }
     }
 }
@@ -77,15 +94,19 @@ function initializeMaxPage() {
     $.mobile.loading('hide');
 }
 
+function removeListFromListView() {
+    $('#lazyloader').empty().listview("refresh");
+}
+
 function loadListView(recordPerPage, innerPageNo) {
     initializeMaxPage()
     loading = true; //interlock to prevent multiple calls
     $.mobile.loading('show');
 
-    console.log('inside loadListView() --> page: ', page);
-    console.log('inside loadListView() --> maxPage: ', maxPage);
-    console.log('inside loadListView() --> recordPerPage: ', recordPerPage);
-    console.log('inside loadListView() --> innerPageNo: ', innerPageNo);
+//    console.log('inside loadListView() --> page: ', page);
+//    console.log('inside loadListView() --> maxPage: ', maxPage);
+//    console.log('inside loadListView() --> recordPerPage: ', recordPerPage);
+//    console.log('inside loadListView() --> innerPageNo: ', innerPageNo);
 
     //Get the actual records..
     restURL = "/ask/pagination/";
@@ -98,8 +119,12 @@ function loadListView(recordPerPage, innerPageNo) {
                     '</li>';
                 questionNo++;
             }); // end each
-//            $('#lazyloader').empty().append(list).listview("refresh");
-            $('#lazyloader').append(list).listview("refresh");
+//            if (newQuestion) {
+//                $('#lazyloader').prepend(list).listview("refresh");
+//                newQuestion=false;
+//            } else {
+                $('#lazyloader').append(list).listview("refresh");
+//            }
 
             loading = false;
             $.mobile.loading('hide');
