@@ -9,8 +9,8 @@ var currentNumberOfRecsFound = 0;
 var previousNumberOfRecsFound = 0;
 var loading = false;
 var questionNo = 1;
-var isHomePage=true;
-
+var isHomePage = true;
+var questionId = "";
 
 
 $(document).ready(function () {
@@ -71,14 +71,13 @@ function loadListView(recordPerPage, innerPageNo) {
     $.getJSON(restURL + innerPageNo + '/' + recordPerPage, {})
         .done(function (data) {
             $.each(data, function (index, value) {
-                list += '<li><a href="#">' +
+                list += '<li><a href="" question-id="' + value.id + '">' +
                     '<h2>' + value.title + '</h2>' +
-                    '<p>' + value.question + '</p></a>' +
-//                    '<a href="#showDetail" data-rel="popup" data-position-to="window" data-transition="pop">Show Detail</a>' +
+                    '<p>' + value.question + '</p>' +
                     '</li>';
                 questionNo++;
 
-                }); // end each
+            }); // end each
             $('#lazyloader').append(list).listview("refresh");
             loading = false;
             $.mobile.loading('hide');
@@ -88,31 +87,83 @@ function loadListView(recordPerPage, innerPageNo) {
 };
 
 
+//////////////////////////////////////////////////////////////////////////////////
 
-$(document).on('pageinit', '#new', function(){
-    $(document).on('click', '#submit', function() { // catch the form's submit event
-        if($('#title').val().length > 0 && $('#question').val().length > 0){
+$(document).on('vclick', '#lazyloader li a', function () {
+    questionId = $(this).attr('question-id');
+    $.mobile.changePage("#detail", { transition: "slide", changeHash: false });
+});
+
+$(document).on('pagebeforeshow', '#detail', function () {
+    isHomePage = false;
+    loading = true; //interlock to prevent multiple calls
+    $.mobile.loading('show');
+    //Get the total number of available isAnswered questions
+    var restURL = "/ask/show/" + questionId;
+    $.getJSON(restURL, function (data) {
+//        currentNumberOfRecsFound = data;
+//        maxPage = Math.ceil(data / recordPerPage);
+        $("#updatequestion").val(data.question);
+        $("#updatetitle").val(data.title);
+        $("#isAnswered").val(data.isAnswered);
+        $("#id").val(data.id);
+    })
+    loading = false;
+    $.mobile.loading('hide');
+})
+
+
+$(document).on('pageinit', '#detail', function () {
+    $(document).on('click', '#updateSubmit', function () { // catch the form's submit event
+        $.ajax({
+            url: '/ask/update',
+            data: $('#id').val(),
+            type: 'PUT',
+            beforeSend: function () {
+                loading = true;
+                $.mobile.loading('show');
+            },
+            complete: function () {
+                loading = false;
+                $.mobile.loading('hide');
+            },
+            success: function (result) {
+//                    $.mobile.changePage("#successfulPostedQuestion");
+                alert('update successful');
+            },
+            error: function (request, error) {
+                alert('Sorry there is an error. Could be due to network problem. Please try again later');
+            }
+        });
+
+        return false; // cancel original event to prevent form submitting
+    });
+});
+
+///////////////////////////////////////////////////////////////////////////
+
+
+$(document).on('pageinit', '#new', function () {
+    $(document).on('click', '#submit', function () { // catch the form's submit event
+        if ($('#title').val().length > 0 && $('#question').val().length > 0) {
             // Send data to server through the Ajax call
             // action is functionality we want to call and outputJSON is our data
             $.ajax({
                 url: '/ask/post',
                 data: $('#newquestionform').serialize(),
                 type: 'POST',
-//                async: 'true',
-//                dataType: 'json',
-//                contentType: "application/json; charset=utf-8",
-                beforeSend: function() {
+                beforeSend: function () {
                     loading = true;
                     $.mobile.loading('show');
                 },
-                complete: function() {
+                complete: function () {
                     loading = false;
                     $.mobile.loading('hide');
                 },
                 success: function (result) {
                     $.mobile.changePage("#successfulPostedQuestion");
                 },
-                error: function (request,error) {
+                error: function (request, error) {
                     alert('Sorry there is an error. Could be due to network problem. Please try again later');
                 }
             });
@@ -123,20 +174,19 @@ $(document).on('pageinit', '#new', function(){
         //remove all the value for the next question..
         $("#question").val('');
         $("#title").val('');
-//        $("#anonymous").val('off').selectmenu('refresh');
 
         return false; // cancel original event to prevent form submitting
     });
 });
 
-$(document).on('pagebeforeshow', '#new', function() {
-//    alert('pagebeforeshow untuk new dipanggil');
-    isHomePage=false;
+
+$(document).on('pagebeforeshow', '#new', function () {
+    isHomePage = false;
 })
 
-$(document).on('pagebeforeshow', '#home', function() {
-//    alert('pagebeforeshow untuk home dipanggil');
-    isHomePage=true;
+
+$(document).on('pagebeforeshow', '#home', function () {
+    isHomePage = true;
     removeListFromListView();
     //reset all the page index variable
     page = 0;

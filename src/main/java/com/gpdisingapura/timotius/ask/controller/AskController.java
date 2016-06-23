@@ -78,9 +78,8 @@ public class AskController {
         return new ResponseEntity<List<Question>>(questions, HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.PUT, value = "/update/{questionId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = {
-            MediaType.APPLICATION_JSON_VALUE})
-    ResponseEntity<Void> modifyById(@PathVariable String questionId, @RequestBody Map<String, String> body)
+    @RequestMapping(method = RequestMethod.PUT, value = "/update/{questionId}")
+    ResponseEntity<Void> modifyById(@PathVariable String questionId)
             throws QuestionDoesNotExistException {
         askService.modifyById(questionId);
         return new ResponseEntity<Void>(HttpStatus.OK);

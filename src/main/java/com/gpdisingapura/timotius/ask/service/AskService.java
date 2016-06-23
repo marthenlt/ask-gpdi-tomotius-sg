@@ -42,7 +42,6 @@ public class AskService {
     }
 
     public List<Question> showInPagination(Integer pageNo, Integer itemPerPage) throws QuestionDoesNotExistException {
-//        Query searchUserQuery = new Query(Criteria.where("isAnswered").is(false)).skip((pageNo-1) * itemPerPage).limit(itemPerPage);
         Query searchUserQuery = new Query(Criteria.where("isAnswered").is(false))
                 .skip((pageNo) * itemPerPage)
                 .limit(itemPerPage)
