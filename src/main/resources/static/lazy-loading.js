@@ -72,11 +72,10 @@ function loadListView(recordPerPage, innerPageNo) {
         .done(function (data) {
             $.each(data, function (index, value) {
                 list += '<li><a href="" question-id="' + value.id + '">' +
-                    '<h2>' + value.title + '</h2>' +
+                    '<h3>' + value.title + '</h3>' +
                     '<p>' + value.question + '</p>' +
                     '</li>';
                 questionNo++;
-
             }); // end each
             $('#lazyloader').append(list).listview("refresh");
             loading = false;
@@ -101,11 +100,8 @@ $(document).on('pagebeforeshow', '#detail', function () {
     //Get the total number of available isAnswered questions
     var restURL = "/ask/show/" + questionId;
     $.getJSON(restURL, function (data) {
-//        currentNumberOfRecsFound = data;
-//        maxPage = Math.ceil(data / recordPerPage);
         $("#updatequestion").val(data.question);
         $("#updatetitle").val(data.title);
-        $("#isAnswered").val(data.isAnswered);
         $("#id").val(data.id);
     })
     loading = false;
@@ -128,14 +124,12 @@ $(document).on('pageinit', '#detail', function () {
                 $.mobile.loading('hide');
             },
             success: function (result) {
-//                    $.mobile.changePage("#successfulPostedQuestion");
-                alert('update successful');
+                $.mobile.changePage("#successfulMarkedQuestion");
             },
             error: function (request, error) {
                 alert('Sorry there is an error. Could be due to network problem. Please try again later');
             }
         });
-
         return false; // cancel original event to prevent form submitting
     });
 });
@@ -170,11 +164,9 @@ $(document).on('pageinit', '#new', function () {
         } else {
             alert('Title and Question fields are mandatory!');
         }
-
         //remove all the value for the next question..
         $("#question").val('');
         $("#title").val('');
-
         return false; // cancel original event to prevent form submitting
     });
 });
