@@ -16,17 +16,16 @@
 <!-- PAGE HOME -->
 <div data-role="page" id="home">
     <div data-role="header">
-        <h1>Ask Application for FAQ Session</h1>
-        <a href="#new" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-left ui-btn-b ui-icon-edit">Ask
-            New Question</a>
+        <h2>Ask Application</h2>
+        <a href="#new" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-left ui-btn-b ui-icon-edit ui-btn-icon-notext">Ask</a>
     </div>
     <div data-role="content">
-        <h1>Number of questions (<span id="questionsNo">0</span>)</h1>
+        <label>Number of questions (<span id="questionsNo">0</span>)</label>
         <ul id="lazyloader" data-role="listview" data-filter="true" data-listomatic="true">
         </ul>
     </div>
     <div data-role="footer">
-        <h2>&copy; 2016 Youth Timothy GPdI Singapore</h2>
+        <h3>&copy;2016 Youth Timothy GPdI Singapore</h3>
     </div>
 </div>
 <!-- end:PAGE HOME -->
@@ -35,11 +34,10 @@
 <!-- PAGE Detail -->
 <div data-role="page" id="detail">
     <div data-role="header">
-        <h1>Detail Question</h1>
+        <h2>Detail Question</h2>
         <a href="#home"
-           class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-left ui-btn-b ui-icon-home">Home</a>
-        <a href="#new" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-left ui-btn-b ui-icon-edit">Ask
-            New Question</a>
+           class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-left ui-btn-b ui-icon-home ui-btn-icon-notext">Home</a>
+        <a href="#new" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-left ui-btn-b ui-icon-edit ui-btn-icon-notext">Ask</a>
     </div>
     <div data-role="content">
 
@@ -68,7 +66,7 @@
         </form>
     </div>
     <div data-role="footer">
-        <h2>&copy; 2016 Youth Timothy GPdI Singapore</h2>
+        <h3>&copy;2016 Youth Timothy GPdI Singapore</h3>
     </div>
 </div>
 <!-- end:PAGE Detail -->
@@ -77,9 +75,9 @@
 <!-- PAGE New -->
 <div data-role="page" id="new">
     <div data-role="header">
-        <h1>Ask New Question</h1>
+        <h2>New Question</h2>
         <a href="#home"
-           class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-left ui-btn-b ui-icon-home">Home</a>
+           class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-left ui-btn-b ui-icon-home ui-btn-icon-notext ui-btn-icon-notext">Home</a>
     </div>
     <div data-role="content">
 
@@ -110,7 +108,7 @@
 
     </div>
     <div data-role="footer">
-        <h2>&copy; 2016 Youth Timothy GPdI Singapore</h2>
+        <h3>&copy;2016 Youth Timothy GPdI Singapore</h3>
     </div>
 </div>
 <!-- end:PAGE New -->
@@ -119,20 +117,18 @@
 <!-- PAGE After Posting Question.. -->
 <div data-role="page" id="successfulPostedQuestion">
     <div data-role="header">
-        <h1>Question Posted Successfully</h1>
+        <h2>Successful</h2>
     </div>
     <div data-role="content">
         <div>
             <label>Your question has been posted. You can choose to ask another question or to see your question being
-                displayed at front page.</label>
+                displayed at front page (Home).</label>
         </div>
-        <a href="#new" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-left ui-btn-b ui-icon-edit">Ask
-            New Question</a>
-        <a href="#home" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-left ui-btn-b ui-icon-home">See
-            The Question</a>
+        <a href="#new" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-left ui-btn-b ui-icon-edit">Ask</a>
+        <a href="#home" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-left ui-btn-b ui-icon-home">Home</a>
     </div>
     <div data-role="footer">
-        <h2>&copy; 2016 Youth Timothy GPdI Singapore</h2>
+        <h3>&copy;2016 Youth Timothy GPdI Singapore</h3>
     </div>
 </div>
 <!-- end:PAGE After Posting Question. -->

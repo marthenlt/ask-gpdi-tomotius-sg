@@ -117,7 +117,7 @@ $(document).on('pageinit', '#detail', function () {
     $(document).on('click', '#updateSubmit', function () { // catch the form's submit event
         $.ajax({
             url: '/ask/update',
-            data: $('#id').val(),
+            data: $('#updateQuestion').serialize(),
             type: 'PUT',
             beforeSend: function () {
                 loading = true;
