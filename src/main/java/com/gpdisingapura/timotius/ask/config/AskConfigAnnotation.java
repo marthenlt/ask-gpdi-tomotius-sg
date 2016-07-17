@@ -6,7 +6,6 @@ import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
@@ -46,7 +45,5 @@ public class AskConfigAnnotation {
 		return mongoTemplate;
 		
 	}
-
-
 
 }
