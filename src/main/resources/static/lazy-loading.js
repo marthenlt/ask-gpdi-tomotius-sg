@@ -11,6 +11,8 @@ var loading = false;
 var questionNo = 1;
 var isHomePage = true;
 var questionId = "";
+var maxLengthForTitleAndQuestion = 30;
+var dotDot = "..";
 
 
 $(document).ready(function () {
@@ -71,10 +73,18 @@ function loadListView(recordPerPage, innerPageNo) {
     $.getJSON(restURL + innerPageNo + '/' + recordPerPage, {})
         .done(function (data) {
             $.each(data, function (index, value) {
+                titleText = value.title;
+                if (titleText.length > maxLengthForTitleAndQuestion) titleText = titleText.substr(0, maxLengthForTitleAndQuestion-3) + dotDot;
+                titleQuestion = value.question;
+                if (titleQuestion.length > maxLengthForTitleAndQuestion) titleQuestion = titleQuestion.substr(0, maxLengthForTitleAndQuestion-3) + dotDot;
                 list += '<li><a href="" question-id="' + value.id + '">' +
-                    '<h3>' + value.title + '</h3>' +
-                    '<p>' + value.question + '</p>' +
+                    '<h3>' + titleText + '</h3>' +
+                    '<p>' + titleQuestion + '</p>' +
                     '</li>';
+                //list += '<li><a href="" question-id="' + value.id + '">' +
+                //    '<h3>' + value.title + '</h3>' +
+                //    '<p>' + value.question + '</p>' +
+                //    '</li>';
                 questionNo++;
             }); // end each
             $('#lazyloader').append(list).listview("refresh");
