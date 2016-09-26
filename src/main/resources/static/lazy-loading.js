@@ -73,18 +73,21 @@ function loadListView(recordPerPage, innerPageNo) {
     $.getJSON(restURL + innerPageNo + '/' + recordPerPage, {})
         .done(function (data) {
             $.each(data, function (index, value) {
-                titleText = value.title;
-                if (titleText.length > maxLengthForTitleAndQuestion) titleText = titleText.substr(0, maxLengthForTitleAndQuestion-3) + dotDot;
+                //titleText = value.title;
+                //if (titleText.length > maxLengthForTitleAndQuestion) titleText = titleText.substr(0, maxLengthForTitleAndQuestion-3) + dotDot;
+                //titleQuestion = value.question;
+                //if (titleQuestion.length > maxLengthForTitleAndQuestion) titleQuestion = titleQuestion.substr(0, maxLengthForTitleAndQuestion-3) + dotDot;
+                //list += '<li><a href="" question-id="' + value.id + '">' +
+                //    '<h3>' + titleText + '</h3>' +
+                //    '<p>' + titleQuestion + '</p>' +
+                //    '</li>';
+                titleCategory = value.category;
                 titleQuestion = value.question;
                 if (titleQuestion.length > maxLengthForTitleAndQuestion) titleQuestion = titleQuestion.substr(0, maxLengthForTitleAndQuestion-3) + dotDot;
                 list += '<li><a href="" question-id="' + value.id + '">' +
-                    '<h3>' + titleText + '</h3>' +
+                    '<h3>' + titleCategory + '</h3>' +
                     '<p>' + titleQuestion + '</p>' +
                     '</li>';
-                //list += '<li><a href="" question-id="' + value.id + '">' +
-                //    '<h3>' + value.title + '</h3>' +
-                //    '<p>' + value.question + '</p>' +
-                //    '</li>';
                 questionNo++;
             }); // end each
             $('#lazyloader').append(list).listview("refresh");
@@ -111,7 +114,7 @@ $(document).on('pagebeforeshow', '#detail', function () {
     var restURL = "/ask/show/" + questionId;
     $.getJSON(restURL, function (data) {
         $("#updatequestion").val(data.question);
-        $("#updatetitle").val(data.title);
+        $("#updatecategory").val(data.category);
         $("#id").val(data.id);
     })
     loading = false;

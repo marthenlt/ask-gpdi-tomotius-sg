@@ -44,12 +44,12 @@
     <div data-role="content">
         <fieldset>
             <div data-role="fieldcontain">
-                <label for="updatetitle">Title</label>
-                <input type="text" name="updatetitle" id="updatetitle" data-clear-btn="true" readonly="true">
+                <label for="detailcategory">Category</label>
+                <input type="text" name="detailcategory" id="detailcategory" data-clear-btn="true" readonly="true">
             </div>
             <div data-role="fieldcontain">
-                <label for="updatequestion">Question</label>
-                <input type="text" name="updatequestion" id="updatequestion" data-clear-btn="true" readonly="true">
+                <label for="detailquestion">Question</label>
+                <input type="text" name="detailquestion" id="detailquestion" data-clear-btn="true" readonly="true">
             </div>
         </fieldset>
         <form id="updateQuestion" class="ui-body ui-body-a ui-corner-all" data-ajax="false">
@@ -79,9 +79,15 @@
         <form id="newquestionform" class="ui-body ui-body-a ui-corner-all" data-ajax="false">
             <fieldset>
                 <div data-role="fieldcontain">
-                    <label for="title">Title</label>
-                    <input type="text" name="title" id="title" data-clear-btn="true"
-                           placeholder="Title of your question...">
+                    <!--<label for="title">Category</label>-->
+                    <!--<input type="text" name="title" id="title" data-clear-btn="true"-->
+                           <!--placeholder="Title of your question...">-->
+                    <label for="selectcategory" class="select">Category</label>
+                    <select name="selectcategory" id="selectcategory">
+                        <option value="LDS">LDS</option>
+                        <option value="Character">Character</option>
+                        <option value="Leadership">Leadership</option>
+                    </select>
                 </div>
                 <div data-role="fieldcontain">
                     <label for="question">Question</label>

@@ -28,9 +28,9 @@ public class AskController {
     //default question post..
     @RequestMapping(method = RequestMethod.POST, value = "/post")
     ResponseEntity<Void> postQuestionAnonymously(
-            @RequestParam("title") String title,
+            @RequestParam("category") String category,
             @RequestParam("question") String q) {
-        askService.postQuestionAnonymously(title, q);
+        askService.postQuestionAnonymously(category, q);
         HttpHeaders headers = new HttpHeaders();
         return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
     }
@@ -38,9 +38,9 @@ public class AskController {
     @RequestMapping(method = RequestMethod.POST, value = "/postBy")
     ResponseEntity<Void> postQuestion(
             @RequestParam("postedBy") String postedBy,
-            @RequestParam("title") String title,
+            @RequestParam("category") String category,
             @RequestParam("question") String q) {
-        askService.postQuestion(postedBy, title, q);
+        askService.postQuestion(postedBy, category, q);
         HttpHeaders headers = new HttpHeaders();
         return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
     }
@@ -83,7 +83,6 @@ public class AskController {
             @RequestParam("id") String questionId)
             throws QuestionDoesNotExistException {
         askService.modifyById(questionId);
-        HttpHeaders headers = new HttpHeaders();
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 

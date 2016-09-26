@@ -25,13 +25,13 @@ public class AskService {
     @Autowired
     MongoOperations mongoOperation;
 
-    public void postQuestionAnonymously(String title, String q) {
-        Question question = new Question(title, q);
+    public void postQuestionAnonymously(String category, String q) {
+        Question question = new Question(category, q);
         mongoOperation.save(question);
     }
 
-    public void postQuestion(String postedBy, String title, String q) {
-        Question question = new Question(title, q, postedBy);
+    public void postQuestion(String postedBy, String category, String q) {
+        Question question = new Question(category, q, postedBy);
         mongoOperation.save(question);
     }
 

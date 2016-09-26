@@ -14,6 +14,7 @@ public class Question {
     @Id
     private String id;
 
+    String category;
     String title;
     String question;
     Date postedAt;
@@ -22,21 +23,22 @@ public class Question {
     Boolean isAnswered;
 
     public Question() {
+        this.category = "undefined";
         this.postedAt = new Date();
         this.postedBy = "anonymous"; //Submit by anonymous..
         this.isAnswered = false;
     };
 
-    public Question(String title, String question, Date postedAt, String postedBy) {
-        this.title = title;
+    public Question(String category, String question, Date postedAt, String postedBy) {
+        this.category = category;
         this.question = question;
         this.postedAt = postedAt;
         this.postedBy = postedBy;
         this.isAnswered = false;
     }
 
-    public Question(String title, String question, String postedBy) {
-        this.title = title;
+    public Question(String category, String question, String postedBy) {
+        this.category = category;
         this.question = question;
         this.postedAt = new Date();
         this.postedBy = postedBy;
@@ -44,8 +46,8 @@ public class Question {
     }
 
     //Default constructor
-    public Question(String title, String question) {
-        this.title = title;
+    public Question(String category, String question) {
+        this.category = category;
         this.question = question;
         this.postedAt = new Date();
         this.postedBy = "anonymous"; //Submit by anonymous..
@@ -110,12 +112,28 @@ public class Question {
         this.theme = theme;
     }
 
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public Boolean getAnswered() {
+        return isAnswered;
+    }
+
+    public void setAnswered(Boolean answered) {
+        isAnswered = answered;
+    }
 
     @Override
     public String toString() {
         return "Question{" +
                 "id='" + id + '\'' +
                 "title='" + title + '\'' +
+                "category='" + category + '\'' +
                 "question='" + question + '\'' +
                 ", postedAt=" + postedAt +
                 ", postedBy='" + postedBy + '\'' +
