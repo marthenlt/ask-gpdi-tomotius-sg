@@ -113,8 +113,8 @@ $(document).on('pagebeforeshow', '#detail', function () {
     //Get the total number of available isAnswered questions
     var restURL = "/ask/show/" + questionId;
     $.getJSON(restURL, function (data) {
-        $("#updatequestion").val(data.question);
-        $("#updatecategory").val(data.category);
+        $("#detailquestion").val(data.question);
+        $("#detailcategory").val(data.category);
         $("#id").val(data.id);
     })
     loading = false;
@@ -152,7 +152,7 @@ $(document).on('pageinit', '#detail', function () {
 
 $(document).on('pageinit', '#new', function () {
     $(document).on('click', '#submit', function () { // catch the form's submit event
-        if ($('#title').val().length > 0 && $('#question').val().length > 0) {
+        if ($('#category').val().length > 0 && $('#question').val().length > 0) {
             // Send data to server through the Ajax call
             // action is functionality we want to call and outputJSON is our data
             $.ajax({
@@ -175,11 +175,11 @@ $(document).on('pageinit', '#new', function () {
                 }
             });
         } else {
-            alert('Title and Question fields are mandatory!');
+            alert('Category and Question fields are mandatory!');
         }
         //remove all the value for the next question..
         $("#question").val('');
-        $("#title").val('');
+        $("#category").val('');
         return false; // cancel original event to prevent form submitting
     });
 });
