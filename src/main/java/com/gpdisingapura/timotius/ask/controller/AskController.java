@@ -4,15 +4,15 @@ import com.gpdisingapura.timotius.ask.model.Question;
 import com.gpdisingapura.timotius.ask.model.QuestionDoesNotExistException;
 import com.gpdisingapura.timotius.ask.service.AskService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+import java.io.ByteArrayInputStream;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Marthen on 6/20/16.
@@ -76,6 +76,34 @@ public class AskController {
     ResponseEntity<List<Question>> findAll() throws QuestionDoesNotExistException {
         List<Question> questions = askService.findAll();
         return new ResponseEntity<List<Question>>(questions, HttpStatus.OK);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/downloadQs", produces = {MediaType.APPLICATION_OCTET_STREAM_VALUE})
+    ResponseEntity<InputStreamResource> downloadQs() throws QuestionDoesNotExistException {
+        List<Question> questions = askService.findAll();
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
+        headers.add("Pragma", "no-cache");
+        headers.add("Expires", "0");
+        StringBuilder sb = new StringBuilder();
+        for (Question question: questions) {
+            sb.append(question.getId())
+                    .append("\t")
+                    .append(question.getCategory())
+                    .append("\t")
+                    .append("\"" + question.getQuestion() + "\"")
+                    .append("\t")
+                    .append(question.getPostedAt())
+                    .append("\t")
+                    .append(question.getAnswered())
+                    .append("\r\n");
+        }
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .contentLength(sb.length())
+                .contentType(MediaType.parseMediaType("application/octet-stream"))
+                .body(new InputStreamResource(new ByteArrayInputStream(sb.toString().getBytes())));
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "/update")
