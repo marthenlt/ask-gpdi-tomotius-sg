@@ -1,0 +1,10 @@
+---
+applications:
+- name: qna
+#  buildpack: https://github.com/gratiartis/java-buildpack
+  memory: 512M
+#  instances: 1
+#  host: super-mini
+#  domain: cfapps.io
+  path: target/myfirstsbootapp-0.0.1-SNAPSHOT.jar
+
