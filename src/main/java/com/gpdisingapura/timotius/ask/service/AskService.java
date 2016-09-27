@@ -65,8 +65,11 @@ public class AskService {
     }
 
     public List<Question> findAll() throws QuestionDoesNotExistException {
-        List<Question> questions = new ArrayList<Question>();
-        questions = mongoOperation.findAll(Question.class);
+//        List<Question> questions = new ArrayList<Question>();
+//        questions = mongoOperation.findAll(Question.class);
+        Query searchUserQuery = new Query(Criteria.where("isAnswered").is(false))
+                .with(new Sort(Sort.Direction.DESC, "postedAt"));
+        List<Question> questions = mongoOperation.find(searchUserQuery, Question.class);
         return questions;
     }
 

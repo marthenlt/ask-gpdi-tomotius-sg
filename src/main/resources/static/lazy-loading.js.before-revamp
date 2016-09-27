@@ -2,13 +2,44 @@
  * Created by Marthen on 6/23/16.
  */
 
+var recordPerPage = 10; //max items per page
+var page = 0; //initialize page number
+var maxPage = 0; //initialized dynamically based on actual number of questions stored in MongoDB..
+var currentNumberOfRecsFound = 0;
+var previousNumberOfRecsFound = 0;
 var loading = false;
 var questionNo = 0;
 var isHomePage = true;
 var questionId = "";
 var maxLengthForTitleAndQuestion = 30;
 var dotDot = "..";
-var currentNumberOfRecsFound=0;
+
+
+//Handler for scrolling toward end of document
+$(document).on("scrollstop", function () {
+    if (isHomePage) {
+        console.log('scroll event..');
+        if (!loading) loadNextPage();
+    }
+});
+
+//Load content for next page
+function loadNextPage() {
+    if (page < maxPage) {
+        loadListView(recordPerPage, ++page);
+    } else {
+        initializeMaxPage();
+        if (previousNumberOfRecsFound != currentNumberOfRecsFound) {
+            console.log('inside loadNextPage() removeListFromListView() is called');
+            removeListFromListView();
+            //reset all the page index variable
+            page = 0;
+            questionNo = 1;
+            previousNumberOfRecsFound = currentNumberOfRecsFound;
+            loadListView(recordPerPage, page);
+        }
+    }
+}
 
 function initializeMaxPage() {
     loading = true; //interlock to prevent multiple calls
@@ -17,6 +48,7 @@ function initializeMaxPage() {
     var restURL = "/ask/numberOfUnansweredRecords";
     $.getJSON(restURL, function (data) {
         currentNumberOfRecsFound = data;
+        maxPage = Math.ceil(data / recordPerPage);
     })
     loading = false;
     $.mobile.loading('hide');
@@ -26,14 +58,14 @@ function removeListFromListView() {
     $('#lazyloader').empty().listview("refresh");
 }
 
-function loadListView() {
+function loadListView(recordPerPage, innerPageNo) {
     initializeMaxPage()
     loading = true; //interlock to prevent multiple calls
     $.mobile.loading('show');
     //Get the actual records..
-    restURL = "/ask/showall/";
+    restURL = "/ask/pagination/";
     var list = '';
-    $.getJSON(restURL, {})
+    $.getJSON(restURL + innerPageNo + '/' + recordPerPage, {})
         .done(function (data) {
             $.each(data, function (index, value) {
                 titleCategory = value.category;
@@ -149,7 +181,9 @@ $(document).on('pagebeforeshow', '#home', function () {
     isHomePage = true;
     removeListFromListView();
     //reset all the page index variable
+    page = 0;
     questionNo = 0;
-    loadListView();
+    previousNumberOfRecsFound = currentNumberOfRecsFound;
+    loadListView(recordPerPage, page);
 })
 
