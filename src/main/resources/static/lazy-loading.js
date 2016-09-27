@@ -8,17 +8,12 @@ var maxPage = 0; //initialized dynamically based on actual number of questions s
 var currentNumberOfRecsFound = 0;
 var previousNumberOfRecsFound = 0;
 var loading = false;
-var questionNo = 1;
+var questionNo = 0;
 var isHomePage = true;
 var questionId = "";
 var maxLengthForTitleAndQuestion = 30;
 var dotDot = "..";
 
-
-$(document).ready(function () {
-    if (isHomePage)
-        loadListView(recordPerPage, maxPage); //load some images onload
-});
 
 //Handler for scrolling toward end of document
 $(document).on("scrollstop", function () {
@@ -73,17 +68,9 @@ function loadListView(recordPerPage, innerPageNo) {
     $.getJSON(restURL + innerPageNo + '/' + recordPerPage, {})
         .done(function (data) {
             $.each(data, function (index, value) {
-                //titleText = value.title;
-                //if (titleText.length > maxLengthForTitleAndQuestion) titleText = titleText.substr(0, maxLengthForTitleAndQuestion-3) + dotDot;
-                //titleQuestion = value.question;
-                //if (titleQuestion.length > maxLengthForTitleAndQuestion) titleQuestion = titleQuestion.substr(0, maxLengthForTitleAndQuestion-3) + dotDot;
-                //list += '<li><a href="" question-id="' + value.id + '">' +
-                //    '<h3>' + titleText + '</h3>' +
-                //    '<p>' + titleQuestion + '</p>' +
-                //    '</li>';
                 titleCategory = value.category;
                 titleQuestion = value.question;
-                if (titleQuestion.length > maxLengthForTitleAndQuestion) titleQuestion = titleQuestion.substr(0, maxLengthForTitleAndQuestion-3) + dotDot;
+                if (titleQuestion.length > maxLengthForTitleAndQuestion) titleQuestion = titleQuestion.substr(0, maxLengthForTitleAndQuestion - 3) + dotDot;
                 list += '<li><a href="" question-id="' + value.id + '">' +
                     '<h3>' + titleCategory + '</h3>' +
                     '<p>' + titleQuestion + '</p>' +
@@ -103,7 +90,7 @@ function loadListView(recordPerPage, innerPageNo) {
 
 $(document).on('vclick', '#lazyloader li a', function () {
     questionId = $(this).attr('question-id');
-    $.mobile.changePage("#detail", { transition: "slide", changeHash: false });
+    $.mobile.changePage("#detail", {transition: "slide", changeHash: false});
 });
 
 $(document).on('pagebeforeshow', '#detail', function () {
@@ -195,7 +182,7 @@ $(document).on('pagebeforeshow', '#home', function () {
     removeListFromListView();
     //reset all the page index variable
     page = 0;
-    questionNo = 1;
+    questionNo = 0;
     previousNumberOfRecsFound = currentNumberOfRecsFound;
     loadListView(recordPerPage, page);
 })
