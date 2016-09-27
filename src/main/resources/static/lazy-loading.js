@@ -151,5 +151,6 @@ $(document).on('pagebeforeshow', '#home', function () {
     //reset all the page index variable
     questionNo = 0;
     loadListView();
+    $('#questionsNo').text(currentNumberOfRecsFound);
 })
 
