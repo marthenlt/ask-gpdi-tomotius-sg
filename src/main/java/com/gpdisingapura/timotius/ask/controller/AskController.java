@@ -25,6 +25,7 @@ public class AskController {
     @Autowired
     AskService askService;
 
+/*
     //default question post..
     @RequestMapping(method = RequestMethod.POST, value = "/post")
     ResponseEntity<Void> postQuestionAnonymously(
@@ -44,6 +45,7 @@ public class AskController {
         HttpHeaders headers = new HttpHeaders();
         return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
     }
+*/
 
     @RequestMapping(method = RequestMethod.GET, value = "/show/{questionId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     ResponseEntity<Question> findById(@PathVariable String questionId) throws QuestionDoesNotExistException {
