@@ -25,7 +25,6 @@ public class AskController {
     @Autowired
     AskService askService;
 
-/*
     //default question post..
     @RequestMapping(method = RequestMethod.POST, value = "/post")
     ResponseEntity<Void> postQuestionAnonymously(
@@ -45,7 +44,6 @@ public class AskController {
         HttpHeaders headers = new HttpHeaders();
         return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
     }
-*/
 
     @RequestMapping(method = RequestMethod.GET, value = "/show/{questionId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     ResponseEntity<Question> findById(@PathVariable String questionId) throws QuestionDoesNotExistException {
@@ -108,26 +106,26 @@ public class AskController {
                 .body(new InputStreamResource(new ByteArrayInputStream(sb.toString().getBytes())));
     }
 
-//
-//    @RequestMapping(method = RequestMethod.PUT, value = "/update")
-//    ResponseEntity<Void> modifyById(
-//            @RequestParam("id") String questionId)
-//            throws QuestionDoesNotExistException {
-//        askService.modifyById(questionId);
-//        return new ResponseEntity<Void>(HttpStatus.OK);
-//    }
-//
-//    @RequestMapping(method = RequestMethod.DELETE, value = "/delete/{questionId}")
-//    ResponseEntity<Void> deleteQuestion(@PathVariable String questionId) throws QuestionDoesNotExistException {
-//        askService.deleteQuestion(questionId);
-//        return new ResponseEntity<Void>(HttpStatus.OK);
-//    }
-//
-//    @RequestMapping(method = RequestMethod.DELETE, value = "/deleteAll")
-//    ResponseEntity<Void> deleteAll() throws QuestionDoesNotExistException {
-//        askService.deleteAll();
-//        return new ResponseEntity<Void>(HttpStatus.OK);
-//    }
+
+    @RequestMapping(method = RequestMethod.PUT, value = "/update")
+    ResponseEntity<Void> modifyById(
+            @RequestParam("id") String questionId)
+            throws QuestionDoesNotExistException {
+        askService.modifyById(questionId);
+        return new ResponseEntity<Void>(HttpStatus.OK);
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE, value = "/delete/{questionId}")
+    ResponseEntity<Void> deleteQuestion(@PathVariable String questionId) throws QuestionDoesNotExistException {
+        askService.deleteQuestion(questionId);
+        return new ResponseEntity<Void>(HttpStatus.OK);
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE, value = "/deleteAll")
+    ResponseEntity<Void> deleteAll() throws QuestionDoesNotExistException {
+        askService.deleteAll();
+        return new ResponseEntity<Void>(HttpStatus.OK);
+    }
 
 
 }

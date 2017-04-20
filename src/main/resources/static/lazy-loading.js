@@ -103,7 +103,7 @@ $(document).on('pageinit', '#detail', function () {
 });
 
 
-/*
+
 $(document).on('pageinit', '#new', function () {
     $(document).on('click', '#submit', function () { // catch the form's submit event
         if ($('#category').val().length > 0 && $('#question').val().length > 0) {
@@ -142,7 +142,7 @@ $(document).on('pageinit', '#new', function () {
 $(document).on('pagebeforeshow', '#new', function () {
     isHomePage = false;
 })
-*/
+
 
 
 $(document).on('pagebeforeshow', '#home', function () {
