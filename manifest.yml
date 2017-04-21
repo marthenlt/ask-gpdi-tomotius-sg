@@ -1,6 +1,6 @@
 ---
 applications:
-- name: qna
+- name: qna-part2-2017
 #  buildpack: https://github.com/gratiartis/java-buildpack
   memory: 512M
 #  instances: 1
