@@ -6,7 +6,7 @@ Framework stacks:
 - UI: jQuery Mobile
 - Backend: Spring Data MongoDB, Spring Web MVC and RESTful. These are part of Spring Boot Starter Libs. Refer to the pom.xml file for more info.
 - DB: MongoDB
-- Container: Red Hat OpenShift
+
 
 Further documentation will be provided.. stay tuned!!
 
